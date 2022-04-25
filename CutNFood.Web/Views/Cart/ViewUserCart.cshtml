@@ -1,0 +1,67 @@
+﻿@using System.Data.Entity;
+@using System.Drawing;
+@using CutNFood.Data.Data;
+@using CutNFood.Web.Models;
+
+@model UserCartViewModel
+@{
+    ViewBag.Title = "MY CART";
+    bool isUserValid = Convert.ToBoolean(Session["IsUserAuthenticated"]);
+    string username = (Session["Username"] ?? "").ToString();
+    CutNFood.Data.Data.tbl_account userAccount = (CutNFood.Data.Data.tbl_account) Session["User"];
+
+}
+<h2>@ViewBag.Title.</h2>
+@*<h3>@ViewBag.Message</h3>*@
+
+<p>Add more products here.....@Html.ActionLink("View Menu", "Menu", "Product")</p>
+
+<div>
+    
+    @if (Model.CartItems != null)
+    {
+        <div>
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>product id</td>
+                    <td>product name</td>
+                    <td>category</td>
+                    <td>image</td>
+                    <td>unit price</td>
+                    <td>unit</td>
+                    <td>total price</td>
+                    <td>Delete</td>
+
+                </tr>
+            </thead>
+            @foreach (var row in Model.CartItems)
+            {
+                <tbody>
+                    <tr>
+                        <td>@row.product_id</td>
+                        <td>@row.product.productName</td>
+                        <td>@row.category.categoryName</td>
+                        <td>
+                            @if (row.product.productImage != null)
+                            {
+                                <img alt="" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(row.product.productImage))" />
+                            }
+                        </td>
+                        <td>@row.product.productPrice</td>
+                        <td>@row.no_of_items</td>
+                        <td>@row.item_totalPrice</td>
+                        <td>@Html.ActionLink("Delete", "DeleteCartItem", "Cart", new { username = username, cartId = Model.Cart.cart_id, cartItemId = row.cartItem_id }, null)</td>
+
+                    </tr>
+                </tbody>
+            }
+        </table>
+        </div>
+        <div>
+            <h3>Overall Total Price: @Model.Cart.totalPrice</h3>
+        </div>
+    }
+          
+</div>
+

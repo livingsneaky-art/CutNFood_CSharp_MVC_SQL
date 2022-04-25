@@ -1,0 +1,52 @@
+﻿@using System.Data.Entity;
+@using System.Drawing;
+@using CutNFood.Data.Data;
+@using CutNFood.Web.Models;
+@model CartViewModel
+@{
+    ViewBag.Title = "View Unpaid Carts";
+    bool isUserValid = Convert.ToBoolean(Session["IsUserAuthenticated"]);
+    string username = (Session["Username"] ?? "").ToString();
+    CutNFood.Data.Data.tbl_account userAccount = (CutNFood.Data.Data.tbl_account)Session["User"];
+
+}
+<h2>@ViewBag.Title.</h2>
+
+<div>
+
+    @if (Model.Carts != null)
+    {
+        <div>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <td>cart id</td>
+                        <td>user</td>
+                        <td>email</td>
+                        <td>total price</td>
+                        <td>IsCheckOut/Paid</td>
+                        <td>ToPay</td>
+
+                    </tr>
+                </thead>
+                @foreach (var row in Model.Carts)
+                {
+                    <tbody>
+                        <tr>
+                            <td>@row.Cart.cart_id</td>
+                            <td>@row.Customer.username</td>
+                            <td>@row.Customer.email</td>
+                            <td>@row.Cart.totalPrice</td>
+                            <td>@row.Cart.isCheckOut</td>
+                            <td>@Html.ActionLink("CheckOut", "CheckOut", "Cart", new { userId = row.Customer.user_id, cartId = row.Cart.cart_id }, null)</td>
+
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+     }
+
+</div>
+
+

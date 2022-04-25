@@ -1,0 +1,40 @@
+﻿@using CutNFood.Data.Data;
+@{ 
+    bool isUserValid = Convert.ToBoolean(Session["IsUserAuthenticated"]);
+    string username = (Session["Username"] ?? "").ToString();
+    CutNFood.Data.Data.tbl_account userAccount = (CutNFood.Data.Data.tbl_account)Session["User"];
+
+}
+@if (isUserValid)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        <ul >@*class="nav navbar-nav navbar-right"*@
+            <li>
+                @Html.ActionLink("Hello " + username + "!", "", "", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+
+            @if (isUserValid && !string.IsNullOrWhiteSpace(username) && userAccount != null && userAccount.userType_id == 1)
+            {
+                <li>
+                    @Html.ActionLink("UnpaidCarts", "ViewCarts", "Cart", new { username = username }, null)
+                </li>
+            }
+            @if (isUserValid && !string.IsNullOrWhiteSpace(username) && userAccount != null && userAccount.userType_id == 2)
+            {
+                <li>
+                    @Html.ActionLink("MyCart", "ViewUserCart", "Cart", new { username = username }, null)
+                </li>
+            }
+            
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
+    }
+}
+else
+{
+    <ul >@*class="nav navbar-nav navbar-right"*@
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

@@ -1,0 +1,61 @@
+﻿@model CutNFood.Web.Models.ProductViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+
+@using (Html.BeginForm("Register", "Product", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype="multipart/form-data"}))
+{
+    <h4>Create a new product.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.product.category_id, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.product.category_id, Model.categories, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.product.productName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.product.productName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.product.productPrice, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.product.productPrice, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.product.productImage, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @*@Html.TextBoxFor(m => m.product.ProductImage, new { @class = "form-control" })*@
+            <input type="file" name="postedFile" />
+        </div>
+        <div>
+            
+            @if (Model.postedFile != null)
+            {
+                <img alt="" src="@String.Format("data:image/png;base64,{0}", Model.postedFile)" />
+            }
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.product.isAvailable, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.CheckBoxFor(m => m.product.isAvailable)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="book-a-table-btn" value="Register" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

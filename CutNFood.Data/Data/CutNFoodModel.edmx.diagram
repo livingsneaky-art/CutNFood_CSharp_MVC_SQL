@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ec342524834d437da5bb98dac48e4073" Name="Diagram1">
+        <EntityTypeShape EntityType="DBCUTNFOODModel.tbl_account" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBCUTNFOODModel.tbl_cart" Width="1.5" PointX="7.625" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBCUTNFOODModel.tbl_cartItem" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBCUTNFOODModel.tbl_category" Width="1.5" PointX="0.5" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBCUTNFOODModel.tbl_products" Width="1.5" PointX="2.625" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBCUTNFOODModel.tbl_userType" Width="1.5" PointX="0.875" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="DBCUTNFOODModel.FK_tbl_account_tbl_userType_userType_id" ManuallyRouted="false" />
+        <AssociationConnector Association="DBCUTNFOODModel.FK_tbl_cart_tbl_account_user_id" ManuallyRouted="false" />
+        <AssociationConnector Association="DBCUTNFOODModel.FK_tbl_cartItem_tbl_cart_cart_id" ManuallyRouted="false" />
+        <AssociationConnector Association="DBCUTNFOODModel.FK_tbl_cartItem_tbl_products_product_id" ManuallyRouted="false" />
+        <AssociationConnector Association="DBCUTNFOODModel.FK_tbl_products_tbl_category_category_id" ManuallyRouted="false" />
+        <AssociationConnector Association="DBCUTNFOODModel.FK_tbl_cartItem_tbl_products_product_id1" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,104 @@
+﻿@using CutNFood.Data.Data;
+@model List<tbl_products>
+@{
+    bool isUserValid = Convert.ToBoolean(Session["IsUserAuthenticated"]);
+    string username = (Session["Username"] ?? "").ToString();
+    CutNFood.Data.Data.tbl_account userAccount = (CutNFood.Data.Data.tbl_account)Session["User"];
+
+    string menuClass = "";
+    string startersOrappetizers = "col-lg-6 menu-item filter-starters";
+    string desserts = "col-lg-6 menu-item filter-desserts";
+    string mainDish = "col-lg-6 menu-item filter-maindish";
+    string sideDish = "col-lg-6 menu-item filter-sidedish";
+    string salads = "col-lg-6 menu-item filter-salads";
+    string vegetables = "col-lg-6 menu-item filter-vegetables";
+    string rice = "col-lg-6 menu-item filter-rice";
+    string drinks = "col-lg-6 menu-item filter-drinks";
+
+}
+@*<style>
+    .btn-warning, .btn-warning:hover, .btn-warning:active, .btn-warning:visited {
+    background-color: #fff !important;
+}
+</style>*@
+
+<section id="menu" class="menu">
+    <div class="container">
+        @if (isUserValid && !string.IsNullOrWhiteSpace(username) && userAccount != null && userAccount.userType_id == 1)
+        {
+            <p>Add more products here.....@Html.ActionLink("Register new product", "Register", "Product")</p>
+        }
+        <div class="section-title">
+            <h2>Check our tasty <span>Menu</span></h2>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 d-flex justify-content-center">
+                <ul id="menu-flters">
+                    <li data-filter="*" class="filter-active">Show All</li>
+                    <li data-filter=".filter-starters">Starters</li>
+                    <li data-filter=".filter-salads">Salads</li>
+                    <li data-filter=".filter-maindish">Specialty</li>
+                    <li data-filter=".filter-sidedish">SideDish</li>
+                    <li data-filter=".filter-vegetables">Vegetables</li>
+                    <li data-filter=".filter-rice">Rice</li>
+                    <li data-filter=".filter-desserts">Desserts</li>
+                    <li data-filter=".filter-drinks">Drinks</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row menu-container">
+
+        @foreach (var row in Model)
+        {
+            if (row.tbl_category.categoryName == "appetizer") { menuClass = startersOrappetizers; }
+            else if (row.tbl_category.categoryName == "dessert") { menuClass = desserts; }
+            else if (row.tbl_category.categoryName == "main dish") { menuClass = mainDish; }
+            else if (row.tbl_category.categoryName == "side dish") { menuClass = sideDish; }
+            else if (row.tbl_category.categoryName == "salad") { menuClass = salads; }
+            else if (row.tbl_category.categoryName == "vegetable") { menuClass = vegetables; }
+            else if (row.tbl_category.categoryName == "rice") { menuClass = rice; }
+            else if (row.tbl_category.categoryName == "drinks") { menuClass = drinks; }
+
+            <div class="@menuClass">
+                <div class="menu-content">
+                    <a href="#" style="font-family: Satisfy, sans-serif;font-size: large;background: #333333;">@row.productName</a>
+                    <span style="background-color:black; color:aliceblue">@row.productPrice</span>
+                </div>
+                @if (isUserValid && !string.IsNullOrWhiteSpace(username) && userAccount != null && userAccount.userType_id == 1)
+                {
+                    <div>
+                        <span>
+                            @Html.ActionLink("Edit", "EditProduct", "Product", new { productId = row.product_id }, new { @class = "btn btn-warning btn-xs" })
+                        </span>
+                        <span>
+                            @Html.ActionLink("Delete", "Delete", "Product", new { productId = row.product_id }, new { @class = "btn btn-warning btn-xs" })
+                        </span>
+                    </div>
+                }
+                @if (isUserValid && !string.IsNullOrWhiteSpace(username) && userAccount != null && userAccount.userType_id == 2)
+                {
+                    <div>
+                        <span>
+                            @Html.ActionLink("AddToCart", "AddToCart", "Product", new { productId = row.product_id, username = username }, new { @class = "btn btn-warning btn-xs" })
+                        </span>
+                    </div>
+                    
+                }
+
+                <div class="menu-ingredients">
+                    Lorem, deren, trataro, filede, nerada
+                </div>
+                <div>
+                    @if (row.productImage != null)
+                    {
+                        <img alt="" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(row.productImage))" />
+                    }
+                </div>
+            </div>
+        }
+        </div>
+
+    </div>
+</section><!-- End Menu Section -->

@@ -1,0 +1,413 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DBCUTNFOODModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_account">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="30" />
+          <Property Name="userType_id" Type="int" />
+          <Property Name="password" Type="varchar" MaxLength="30" />
+          <Property Name="email" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="tbl_cart">
+          <Key>
+            <PropertyRef Name="cart_id" />
+          </Key>
+          <Property Name="cart_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="totalPrice" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="isCheckOut" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_cartItem">
+          <Key>
+            <PropertyRef Name="cartItem_id" />
+          </Key>
+          <Property Name="cartItem_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="product_id" Type="int" />
+          <Property Name="no_of_items" Type="int" />
+          <Property Name="item_totalPrice" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="cart_id" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_category">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="categoryName" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="tbl_products">
+          <Key>
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="product_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="productName" Type="varchar" MaxLength="100" />
+          <Property Name="productPrice" Type="numeric" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="category_id" Type="int" Nullable="false" />
+          <Property Name="isAvailable" Type="bit" Nullable="false" />
+          <Property Name="productImage" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="tbl_userType">
+          <Key>
+            <PropertyRef Name="userType_id" />
+          </Key>
+          <Property Name="userType_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userType" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_tbl_account_tbl_userType_userType_id">
+          <End Role="tbl_userType" Type="Self.tbl_userType" Multiplicity="0..1" />
+          <End Role="tbl_account" Type="Self.tbl_account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_userType">
+              <PropertyRef Name="userType_id" />
+            </Principal>
+            <Dependent Role="tbl_account">
+              <PropertyRef Name="userType_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_cart_tbl_account_user_id">
+          <End Role="tbl_account" Type="Self.tbl_account" Multiplicity="0..1" />
+          <End Role="tbl_cart" Type="Self.tbl_cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_account">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="tbl_cart">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_cartItem_tbl_cart_cart_id">
+          <End Role="tbl_cart" Type="Self.tbl_cart" Multiplicity="0..1" />
+          <End Role="tbl_cartItem" Type="Self.tbl_cartItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_cart">
+              <PropertyRef Name="cart_id" />
+            </Principal>
+            <Dependent Role="tbl_cartItem">
+              <PropertyRef Name="cart_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_cartItem_tbl_products_product_id">
+          <End Role="tbl_products" Type="Self.tbl_products" Multiplicity="0..1" />
+          <End Role="tbl_cartItem" Type="Self.tbl_cartItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="tbl_cartItem">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_products_tbl_category_category_id">
+          <End Role="tbl_category" Type="Self.tbl_category" Multiplicity="1" />
+          <End Role="tbl_products" Type="Self.tbl_products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_category">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="tbl_products">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBCUTNFOODModelStoreContainer">
+          <EntitySet Name="tbl_account" EntityType="Self.tbl_account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_cart" EntityType="Self.tbl_cart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_cartItem" EntityType="Self.tbl_cartItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_category" EntityType="Self.tbl_category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_products" EntityType="Self.tbl_products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_userType" EntityType="Self.tbl_userType" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tbl_account_tbl_userType_userType_id" Association="Self.FK_tbl_account_tbl_userType_userType_id">
+            <End Role="tbl_userType" EntitySet="tbl_userType" />
+            <End Role="tbl_account" EntitySet="tbl_account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_cart_tbl_account_user_id" Association="Self.FK_tbl_cart_tbl_account_user_id">
+            <End Role="tbl_account" EntitySet="tbl_account" />
+            <End Role="tbl_cart" EntitySet="tbl_cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_cartItem_tbl_cart_cart_id" Association="Self.FK_tbl_cartItem_tbl_cart_cart_id">
+            <End Role="tbl_cart" EntitySet="tbl_cart" />
+            <End Role="tbl_cartItem" EntitySet="tbl_cartItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_cartItem_tbl_products_product_id" Association="Self.FK_tbl_cartItem_tbl_products_product_id">
+            <End Role="tbl_products" EntitySet="tbl_products" />
+            <End Role="tbl_cartItem" EntitySet="tbl_cartItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_products_tbl_category_category_id" Association="Self.FK_tbl_products_tbl_category_category_id">
+            <End Role="tbl_category" EntitySet="tbl_category" />
+            <End Role="tbl_products" EntitySet="tbl_products" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBCUTNFOODModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_account">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="userType_id" Type="Int32" />
+          <Property Name="password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tbl_userType" Relationship="Self.FK_tbl_account_tbl_userType_userType_id" FromRole="tbl_account" ToRole="tbl_userType" />
+          <NavigationProperty Name="tbl_cart" Relationship="Self.FK_tbl_cart_tbl_account_user_id" FromRole="tbl_account" ToRole="tbl_cart" />
+        </EntityType>
+        <EntityType Name="tbl_cart">
+          <Key>
+            <PropertyRef Name="cart_id" />
+          </Key>
+          <Property Name="cart_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="totalPrice" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="user_id" Type="Int32" />
+          <NavigationProperty Name="tbl_account" Relationship="Self.FK_tbl_cart_tbl_account_user_id" FromRole="tbl_cart" ToRole="tbl_account" />
+          <NavigationProperty Name="tbl_cartItem" Relationship="Self.FK_tbl_cartItem_tbl_cart_cart_id" FromRole="tbl_cart" ToRole="tbl_cartItem" />
+          <Property Name="isCheckOut" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_cartItem">
+          <Key>
+            <PropertyRef Name="cartItem_id" />
+          </Key>
+          <Property Name="cartItem_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="product_id" Type="Int32" />
+          <Property Name="no_of_items" Type="Int32" />
+          <Property Name="item_totalPrice" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="cart_id" Type="Int32" />
+          <NavigationProperty Name="tbl_cart" Relationship="Self.FK_tbl_cartItem_tbl_cart_cart_id" FromRole="tbl_cartItem" ToRole="tbl_cart" />
+          <NavigationProperty Name="tbl_products" Relationship="Self.FK_tbl_cartItem_tbl_products_product_id" FromRole="tbl_cartItem" ToRole="tbl_products" />
+          <NavigationProperty Name="tbl_products1" Relationship="DBCUTNFOODModel.FK_tbl_cartItem_tbl_products_product_id1" FromRole="tbl_cartItem" ToRole="tbl_products" />
+        </EntityType>
+        <EntityType Name="tbl_category">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="categoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tbl_products" Relationship="Self.FK_tbl_products_tbl_category_category_id" FromRole="tbl_category" ToRole="tbl_products" />
+        </EntityType>
+        <EntityType Name="tbl_products">
+          <Key>
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="product_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="productName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="productPrice" Type="Decimal" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="category_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tbl_cartItem" Relationship="Self.FK_tbl_cartItem_tbl_products_product_id" FromRole="tbl_products" ToRole="tbl_cartItem" />
+          <NavigationProperty Name="tbl_category" Relationship="Self.FK_tbl_products_tbl_category_category_id" FromRole="tbl_products" ToRole="tbl_category" />
+          <Property Name="isAvailable" Type="Boolean" Nullable="false" />
+          <Property Name="productImage" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="tbl_cartItem1" Relationship="DBCUTNFOODModel.FK_tbl_cartItem_tbl_products_product_id1" FromRole="tbl_products" ToRole="tbl_cartItem" />
+        </EntityType>
+        <EntityType Name="tbl_userType">
+          <Key>
+            <PropertyRef Name="userType_id" />
+          </Key>
+          <Property Name="userType_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tbl_account" Relationship="Self.FK_tbl_account_tbl_userType_userType_id" FromRole="tbl_userType" ToRole="tbl_account" />
+        </EntityType>
+        <Association Name="FK_tbl_account_tbl_userType_userType_id">
+          <End Role="tbl_userType" Type="Self.tbl_userType" Multiplicity="0..1" />
+          <End Role="tbl_account" Type="Self.tbl_account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_userType">
+              <PropertyRef Name="userType_id" />
+            </Principal>
+            <Dependent Role="tbl_account">
+              <PropertyRef Name="userType_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_cart_tbl_account_user_id">
+          <End Role="tbl_account" Type="Self.tbl_account" Multiplicity="0..1" />
+          <End Role="tbl_cart" Type="Self.tbl_cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_account">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="tbl_cart">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_cartItem_tbl_cart_cart_id">
+          <End Role="tbl_cart" Type="Self.tbl_cart" Multiplicity="0..1" />
+          <End Role="tbl_cartItem" Type="Self.tbl_cartItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_cart">
+              <PropertyRef Name="cart_id" />
+            </Principal>
+            <Dependent Role="tbl_cartItem">
+              <PropertyRef Name="cart_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_cartItem_tbl_products_product_id">
+          <End Role="tbl_products" Type="Self.tbl_products" Multiplicity="0..1" />
+          <End Role="tbl_cartItem" Type="Self.tbl_cartItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="tbl_cartItem">
+              <PropertyRef Name="cart_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_products_tbl_category_category_id">
+          <End Role="tbl_category" Type="Self.tbl_category" Multiplicity="1" />
+          <End Role="tbl_products" Type="Self.tbl_products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_category">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="tbl_products">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBCUTNFOODEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_account" EntityType="Self.tbl_account" />
+          <EntitySet Name="tbl_cart" EntityType="Self.tbl_cart" />
+          <EntitySet Name="tbl_cartItem" EntityType="Self.tbl_cartItem" />
+          <EntitySet Name="tbl_category" EntityType="Self.tbl_category" />
+          <EntitySet Name="tbl_products" EntityType="Self.tbl_products" />
+          <EntitySet Name="tbl_userType" EntityType="Self.tbl_userType" />
+          <AssociationSet Name="FK_tbl_account_tbl_userType_userType_id" Association="Self.FK_tbl_account_tbl_userType_userType_id">
+            <End Role="tbl_userType" EntitySet="tbl_userType" />
+            <End Role="tbl_account" EntitySet="tbl_account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_cart_tbl_account_user_id" Association="Self.FK_tbl_cart_tbl_account_user_id">
+            <End Role="tbl_account" EntitySet="tbl_account" />
+            <End Role="tbl_cart" EntitySet="tbl_cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_cartItem_tbl_cart_cart_id" Association="Self.FK_tbl_cartItem_tbl_cart_cart_id">
+            <End Role="tbl_cart" EntitySet="tbl_cart" />
+            <End Role="tbl_cartItem" EntitySet="tbl_cartItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_cartItem_tbl_products_product_id" Association="Self.FK_tbl_cartItem_tbl_products_product_id">
+            <End Role="tbl_products" EntitySet="tbl_products" />
+            <End Role="tbl_cartItem" EntitySet="tbl_cartItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_products_tbl_category_category_id" Association="Self.FK_tbl_products_tbl_category_category_id">
+            <End Role="tbl_category" EntitySet="tbl_category" />
+            <End Role="tbl_products" EntitySet="tbl_products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_cartItem_tbl_products_product_id1" Association="DBCUTNFOODModel.FK_tbl_cartItem_tbl_products_product_id1">
+            <End Role="tbl_products" EntitySet="tbl_products" />
+            <End Role="tbl_cartItem" EntitySet="tbl_cartItem" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK_tbl_cartItem_tbl_products_product_id1">
+          <End Type="DBCUTNFOODModel.tbl_products" Role="tbl_products" Multiplicity="0..1" />
+          <End Type="DBCUTNFOODModel.tbl_cartItem" Role="tbl_cartItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="tbl_cartItem">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBCUTNFOODModelStoreContainer" CdmEntityContainer="DBCUTNFOODEntities">
+          <EntitySetMapping Name="tbl_account">
+            <EntityTypeMapping TypeName="DBCUTNFOODModel.tbl_account">
+              <MappingFragment StoreEntitySet="tbl_account">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="userType_id" ColumnName="userType_id" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="email" ColumnName="email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_cart">
+            <EntityTypeMapping TypeName="DBCUTNFOODModel.tbl_cart">
+              <MappingFragment StoreEntitySet="tbl_cart">
+                <ScalarProperty Name="isCheckOut" ColumnName="isCheckOut" />
+                <ScalarProperty Name="cart_id" ColumnName="cart_id" />
+                <ScalarProperty Name="totalPrice" ColumnName="totalPrice" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_cartItem">
+            <EntityTypeMapping TypeName="DBCUTNFOODModel.tbl_cartItem">
+              <MappingFragment StoreEntitySet="tbl_cartItem">
+                <ScalarProperty Name="cartItem_id" ColumnName="cartItem_id" />
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="no_of_items" ColumnName="no_of_items" />
+                <ScalarProperty Name="item_totalPrice" ColumnName="item_totalPrice" />
+                <ScalarProperty Name="cart_id" ColumnName="cart_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_category">
+            <EntityTypeMapping TypeName="DBCUTNFOODModel.tbl_category">
+              <MappingFragment StoreEntitySet="tbl_category">
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+                <ScalarProperty Name="categoryName" ColumnName="categoryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_products">
+            <EntityTypeMapping TypeName="DBCUTNFOODModel.tbl_products">
+              <MappingFragment StoreEntitySet="tbl_products">
+                <ScalarProperty Name="productImage" ColumnName="productImage" />
+                <ScalarProperty Name="isAvailable" ColumnName="isAvailable" />
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="productName" ColumnName="productName" />
+                <ScalarProperty Name="productPrice" ColumnName="productPrice" />
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_userType">
+            <EntityTypeMapping TypeName="DBCUTNFOODModel.tbl_userType">
+              <MappingFragment StoreEntitySet="tbl_userType">
+                <ScalarProperty Name="userType_id" ColumnName="userType_id" />
+                <ScalarProperty Name="userType" ColumnName="userType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
